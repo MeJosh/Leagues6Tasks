@@ -83,12 +83,12 @@ const pointsToNext = computed(() =>
     </div>
 
     <!-- Full tier ladder -->
-    <div class="flex items-center justify-between gap-1">
+    <div class="flex items-start justify-between gap-1">
       <template v-for="(cup, i) in CUPS" :key="cup.name">
         <!-- Connector line -->
         <div
           v-if="i > 0"
-          class="h-0.5 flex-1 rounded-full transition-colors"
+          class="mt-[13px] h-0.5 flex-1 rounded-full transition-colors"
           :class="points >= cup.threshold ? cup.barColor : 'bg-gray-700'"
         />
         <!-- Cup node -->
@@ -107,7 +107,7 @@ const pointsToNext = computed(() =>
             <span v-else class="text-[9px]">{{ cup.threshold >= 1000 ? `${cup.threshold / 1000}k` : cup.threshold }}</span>
           </div>
           <span
-            class="hidden text-[10px] sm:block"
+            class="hidden w-14 text-center text-[10px] sm:block"
             :class="points >= cup.threshold ? cup.color : 'text-gray-700'"
           >{{ cup.name }}</span>
         </div>

@@ -147,7 +147,7 @@ function toggleRegion(region: string) {
         <!-- Connector line -->
         <div
           v-if="i > 0"
-          class="mt-3.5 h-0.5 flex-1 rounded-full transition-colors"
+          class="mt-[13px] h-0.5 flex-1 rounded-full transition-colors"
           :class="connectorColor(i)"
         />
 

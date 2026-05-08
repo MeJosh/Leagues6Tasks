@@ -69,6 +69,15 @@ export function createCharacterStore(storage: Storage = localStorage) {
     updateCharacter(characterId, { chosenRegions: regions })
   }
 
+  function removeCompletedFromTodo(characterId: string) {
+    const character = getCharacter(characterId)
+    if (!character) return
+    const completedSet = new Set(character.completedTaskIds)
+    updateCharacter(characterId, {
+      todoTaskIds: character.todoTaskIds.filter((id) => !completedSet.has(id)),
+    })
+  }
+
   function addToTodo(characterId: string, taskId: number) {
     const character = getCharacter(characterId)
     if (!character) return
@@ -110,6 +119,7 @@ export function createCharacterStore(storage: Storage = localStorage) {
     setChosenRegions,
     addToTodo,
     removeFromTodo,
+    removeCompletedFromTodo,
     reorderTodo,
     markCompleted,
   }

@@ -8,6 +8,7 @@ import ImportModal from '@/components/ImportModal.vue'
 import CupProgress from '@/components/CupProgress.vue'
 import RegionMap from '@/components/RegionMap.vue'
 import PactProgress from '@/components/PactProgress.vue'
+import TodoQuickAccess from '@/components/TodoQuickAccess.vue'
 
 const route = useRoute()
 const { getCharacter, setCompletedTasks, setChosenRegions } = useCharacters()
@@ -54,6 +55,28 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
     <!-- Points -->
     <PointsSummary :earned="earnedPoints" :planned="plannedPoints" class="mb-4" />
 
+    <!-- Actions -->
+    <div class="mb-6 flex flex-wrap gap-3">
+      <RouterLink
+        :to="`/character/${characterId}/tasks`"
+        class="flex-1 rounded-lg bg-blue-600 py-3 text-center text-sm font-medium text-white hover:bg-blue-500"
+      >
+        View All Tasks
+      </RouterLink>
+      <RouterLink
+        :to="`/character/${characterId}/todo`"
+        class="flex-1 rounded-lg bg-gray-700 py-3 text-center text-sm font-medium text-gray-200 hover:bg-gray-600"
+      >
+        View TODO List ({{ character.todoTaskIds.length }})
+      </RouterLink>
+      <button
+        class="rounded-lg bg-gray-700 px-5 py-3 text-sm font-medium text-gray-200 hover:bg-gray-600"
+        @click="showImport = true"
+      >
+        Import Progress
+      </button>
+    </div>
+
     <!-- Cup tier progress -->
     <CupProgress :points="earnedPoints" class="mb-6" />
 
@@ -66,7 +89,16 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
     />
 
     <!-- Pact tasks -->
-    <PactProgress :pact-points="pactPoints" class="mb-8" />
+    <PactProgress
+      :pact-points="pactPoints"
+      :completed-ids="character.completedTaskIds"
+      :chosen-regions="character.chosenRegions"
+      :character-id="characterId"
+      class="mb-6"
+    />
+
+    <!-- TODO quick access -->
+    <TodoQuickAccess :character-id="characterId" class="mb-8" />
 
     <!-- Progress by tier -->
     <div class="mb-8">
@@ -114,27 +146,6 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
       </div>
     </div>
 
-    <!-- Actions -->
-    <div class="flex flex-wrap gap-3">
-      <RouterLink
-        :to="`/character/${characterId}/tasks`"
-        class="flex-1 rounded-lg bg-blue-600 py-3 text-center text-sm font-medium text-white hover:bg-blue-500"
-      >
-        View All Tasks
-      </RouterLink>
-      <RouterLink
-        :to="`/character/${characterId}/todo`"
-        class="flex-1 rounded-lg bg-gray-700 py-3 text-center text-sm font-medium text-gray-200 hover:bg-gray-600"
-      >
-        View TODO List ({{ character.todoTaskIds.length }})
-      </RouterLink>
-      <button
-        class="rounded-lg bg-gray-700 px-5 py-3 text-sm font-medium text-gray-200 hover:bg-gray-600"
-        @click="showImport = true"
-      >
-        Import Progress
-      </button>
-    </div>
   </div>
 
   <ImportModal v-if="showImport" @confirm="onImport" @close="showImport = false" />

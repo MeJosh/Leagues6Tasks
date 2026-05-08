@@ -9,7 +9,7 @@ import type { TierName } from '@/types'
 const route = useRoute()
 const router = useRouter()
 const characterId = route.params.id as string
-const { getCharacter, removeFromTodo, reorderTodo, markCompleted } = useCharacters()
+const { getCharacter, removeFromTodo, removeCompletedFromTodo, reorderTodo, markCompleted } = useCharacters()
 const { allTasks } = useTasks()
 
 const character = computed(() => getCharacter(characterId))
@@ -66,6 +66,13 @@ function moveDown(index: number) {
           <span class="text-blue-400">{{ plannedPoints.toLocaleString() }} pts remaining</span>
         </p>
       </div>
+      <button
+        v-if="todoTasks.some(t => character?.completedTaskIds.includes(t.taskId))"
+        class="rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-900/40 hover:text-red-300"
+        @click="removeCompletedFromTodo(characterId)"
+      >
+        Remove completed
+      </button>
       <RouterLink
         :to="`/character/${characterId}/tasks`"
         class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"

@@ -15,10 +15,18 @@ export interface TaskFilters {
   search: string
 }
 
+function activeRegions(completedCount: number, chosenRegions: string[]): Set<string> {
+  const regions = new Set(['General', 'Varlamore'])
+  if (completedCount >= 80) regions.add('Karamja')
+  chosenRegions.forEach((r) => { if (r) regions.add(r) })
+  return regions
+}
+
 export function useFilteredTasks(
   completedIds: () => number[],
   todoIds: () => number[],
   filters: () => TaskFilters,
+  chosenRegions: () => string[] = () => [],
 ) {
   const filteredTasks = computed(() => {
     const completedSet = new Set(completedIds())
@@ -26,8 +34,15 @@ export function useFilteredTasks(
     const { area, tier, status, search } = filters()
     const q = search.trim().toLowerCase()
 
+    const unlockedRegions =
+      area === 'unlocked'
+        ? activeRegions(completedIds().length, chosenRegions())
+        : null
+
     return allTasks.filter((task) => {
-      if (area && task.area !== area) return false
+      if (unlockedRegions) {
+        if (!unlockedRegions.has(task.area)) return false
+      } else if (area && task.area !== area) return false
       if (tier !== null && task.tier !== tier) return false
       if (status === 'completed' && !completedSet.has(task.taskId)) return false
       if (status === 'incomplete' && completedSet.has(task.taskId)) return false

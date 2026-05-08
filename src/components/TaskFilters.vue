@@ -34,6 +34,7 @@ const statuses = [
       class="rounded-lg bg-gray-800 px-3 py-2 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="">All Areas</option>
+      <option value="unlocked">Unlocked</option>
       <option v-for="area in AREAS" :key="area" :value="area">{{ area }}</option>
     </select>
 

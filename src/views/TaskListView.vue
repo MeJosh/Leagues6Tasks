@@ -15,9 +15,9 @@ const { getCharacter, markCompleted, addToTodo, removeFromTodo } = useCharacters
 const character = computed(() => getCharacter(characterId))
 
 const filters = reactive<TaskFilters>({
-  area: '',
+  area: 'unlocked',
   tier: null,
-  status: 'all',
+  status: 'incomplete',
   search: '',
 })
 
@@ -25,6 +25,7 @@ const { filteredTasks } = useFilteredTasks(
   () => character.value?.completedTaskIds ?? [],
   () => character.value?.todoTaskIds ?? [],
   () => filters,
+  () => character.value?.chosenRegions ?? [],
 )
 
 const { earnedPoints, plannedPoints } = useCharacterStats(
