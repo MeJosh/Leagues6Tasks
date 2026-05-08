@@ -28,6 +28,7 @@ export interface Character {
   name: string
   completedTaskIds: number[]
   todoTaskIds: number[]
+  chosenRegions: string[]
   createdAt: string
 }
 

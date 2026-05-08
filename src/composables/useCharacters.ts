@@ -16,7 +16,10 @@ export function createCharacterStore(storage: Storage = localStorage) {
   const initial = (() => {
     try {
       const raw = storage.getItem(STORAGE_KEY)
-      return raw ? (JSON.parse(raw) as Character[]) : []
+      if (!raw) return []
+      // Normalize: backfill chosenRegions for characters saved before this field existed
+      const parsed = JSON.parse(raw) as Character[]
+      return parsed.map((c) => ({ ...c, chosenRegions: c.chosenRegions ?? [] }))
     } catch {
       return []
     }
@@ -34,6 +37,7 @@ export function createCharacterStore(storage: Storage = localStorage) {
       name: name.trim(),
       completedTaskIds: [],
       todoTaskIds: [],
+      chosenRegions: [],
       createdAt: new Date().toISOString(),
     }
     characters.value = [...characters.value, character]
@@ -59,6 +63,10 @@ export function createCharacterStore(storage: Storage = localStorage) {
 
   function setCompletedTasks(characterId: string, taskIds: number[]) {
     updateCharacter(characterId, { completedTaskIds: taskIds })
+  }
+
+  function setChosenRegions(characterId: string, regions: string[]) {
+    updateCharacter(characterId, { chosenRegions: regions })
   }
 
   function addToTodo(characterId: string, taskId: number) {
@@ -99,6 +107,7 @@ export function createCharacterStore(storage: Storage = localStorage) {
     updateCharacter,
     deleteCharacter,
     setCompletedTasks,
+    setChosenRegions,
     addToTodo,
     removeFromTodo,
     reorderTodo,

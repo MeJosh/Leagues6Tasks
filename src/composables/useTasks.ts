@@ -81,5 +81,11 @@ export function useCharacterStats(completedIds: () => number[], todoIds: () => n
     return result
   })
 
-  return { earnedPoints, plannedPoints, completedCount, completedByTier, completedByArea }
+  const pactPoints = computed(() => {
+    const completedSet = new Set(completedIds())
+    const count = allTasks.filter((t) => t.pactTask && completedSet.has(t.taskId)).length
+    return Math.min(40, count)
+  })
+
+  return { earnedPoints, plannedPoints, completedCount, completedByTier, completedByArea, pactPoints }
 }

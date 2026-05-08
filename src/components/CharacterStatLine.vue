@@ -6,7 +6,7 @@ import { useCharacterStats } from '@/composables/useTasks'
 const props = defineProps<{ characterId: string }>()
 const { getCharacter } = useCharacters()
 const char = computed(() => getCharacter(props.characterId))
-const { earnedPoints, plannedPoints } = useCharacterStats(
+const { earnedPoints, plannedPoints, pactPoints } = useCharacterStats(
   () => char.value?.completedTaskIds ?? [],
   () => char.value?.todoTaskIds ?? [],
 )
@@ -19,5 +19,7 @@ const { earnedPoints, plannedPoints } = useCharacterStats(
     <span class="text-blue-400">{{ plannedPoints.toLocaleString() }} planned</span>
     <span class="mx-1.5 text-gray-600">·</span>
     <span>{{ char?.completedTaskIds?.length ?? 0 }} tasks done</span>
+    <span class="mx-1.5 text-gray-600">·</span>
+    <span class="text-violet-400">{{ pactPoints }}/40 pacts</span>
   </p>
 </template>

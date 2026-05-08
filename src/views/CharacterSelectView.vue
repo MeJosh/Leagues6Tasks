@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCharacters } from '@/composables/useCharacters'
 import CharacterStatLine from '@/components/CharacterStatLine.vue'
+import RegionChips from '@/components/RegionChips.vue'
 
 const router = useRouter()
 const { characters, createCharacter, deleteCharacter } = useCharacters()
@@ -52,6 +53,7 @@ function confirmDelete(id: string, name: string) {
         <div>
           <p class="font-semibold text-white">{{ char.name }}</p>
           <CharacterStatLine :character-id="char.id" />
+          <RegionChips :chosen-regions="char.chosenRegions" />
         </div>
         <div class="flex items-center gap-3">
           <svg class="h-5 w-5 text-gray-400 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor">

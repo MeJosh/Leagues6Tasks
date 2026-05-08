@@ -6,14 +6,16 @@ import { useCharacterStats } from '@/composables/useTasks'
 import PointsSummary from '@/components/PointsSummary.vue'
 import ImportModal from '@/components/ImportModal.vue'
 import CupProgress from '@/components/CupProgress.vue'
+import RegionMap from '@/components/RegionMap.vue'
+import PactProgress from '@/components/PactProgress.vue'
 
 const route = useRoute()
-const { getCharacter, setCompletedTasks } = useCharacters()
+const { getCharacter, setCompletedTasks, setChosenRegions } = useCharacters()
 
 const characterId = route.params.id as string
 const character = computed(() => getCharacter(characterId))
 
-const { earnedPoints, plannedPoints, completedByTier, completedByArea } = useCharacterStats(
+const { earnedPoints, plannedPoints, completedByTier, completedByArea, pactPoints } = useCharacterStats(
   () => character.value?.completedTaskIds ?? [],
   () => character.value?.todoTaskIds ?? [],
 )
@@ -53,7 +55,18 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
     <PointsSummary :earned="earnedPoints" :planned="plannedPoints" class="mb-4" />
 
     <!-- Cup tier progress -->
-    <CupProgress :points="earnedPoints" class="mb-8" />
+    <CupProgress :points="earnedPoints" class="mb-6" />
+
+    <!-- Region map -->
+    <RegionMap
+      :completed-ids="character.completedTaskIds"
+      :chosen-regions="character.chosenRegions"
+      class="mb-6"
+      @update:chosen-regions="setChosenRegions(characterId, $event)"
+    />
+
+    <!-- Pact tasks -->
+    <PactProgress :pact-points="pactPoints" class="mb-8" />
 
     <!-- Progress by tier -->
     <div class="mb-8">
