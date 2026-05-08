@@ -56,7 +56,7 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
     <PointsSummary :earned="earnedPoints" :planned="plannedPoints" class="mb-4" />
 
     <!-- Actions -->
-    <div class="mb-6 flex flex-wrap gap-3">
+    <div class="mb-4 flex flex-wrap gap-3">
       <RouterLink
         :to="`/character/${characterId}/tasks`"
         class="flex-1 rounded-lg bg-blue-600 py-3 text-center text-sm font-medium text-white hover:bg-blue-500"
