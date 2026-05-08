@@ -33,8 +33,8 @@ const regionPactTasks = computed(() => {
     .filter((t) => t.pactTask && regions.includes(t.area))
     .sort((a, b) => {
       // Incomplete first, then by area, then by tier
-      const aDone = completedSet.value.has(a.taskId) ? 1 : 0
-      const bDone = completedSet.value.has(b.taskId) ? 1 : 0
+      const aDone = completedSet.value.has(a.structId) ? 1 : 0
+      const bDone = completedSet.value.has(b.structId) ? 1 : 0
       if (aDone !== bDone) return aDone - bDone
       if (a.area !== b.area) return a.area.localeCompare(b.area)
       return a.tier - b.tier
@@ -108,16 +108,16 @@ const expanded = ref(false)
         <tbody class="divide-y divide-gray-700/50">
           <tr
             v-for="task in regionPactTasks"
-            :key="task.taskId"
+            :key="task.structId"
             class="transition-colors"
-            :class="completedSet.has(task.taskId) ? 'bg-gray-900/40 text-gray-600' : 'bg-gray-900'"
+            :class="completedSet.has(task.structId) ? 'bg-gray-900/40 text-gray-600' : 'bg-gray-900'"
           >
             <td class="px-3 py-2.5 text-center">
-              <span v-if="completedSet.has(task.taskId)" class="text-violet-400">✓</span>
+              <span v-if="completedSet.has(task.structId)" class="text-violet-400">✓</span>
               <span v-else class="text-gray-700">·</span>
             </td>
             <td class="px-3 py-2.5">
-              <span :class="completedSet.has(task.taskId) ? 'line-through text-gray-600' : 'text-gray-200'">
+              <span :class="completedSet.has(task.structId) ? 'line-through text-gray-600' : 'text-gray-200'">
                 {{ task.name }}
               </span>
             </td>
@@ -127,16 +127,16 @@ const expanded = ref(false)
             </td>
             <td class="px-3 py-2.5 text-center">
               <button
-                v-if="!todoSet.has(task.taskId)"
+                v-if="!todoSet.has(task.structId)"
                 class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-400 hover:bg-blue-600 hover:text-white"
-                @click="addToTodo(characterId, task.taskId)"
+                @click="addToTodo(characterId, task.structId)"
               >
                 + Add
               </button>
               <button
                 v-else
                 class="rounded bg-blue-900/50 px-2 py-1 text-xs text-blue-300 hover:bg-red-900/40 hover:text-red-400"
-                @click="removeFromTodo(characterId, task.taskId)"
+                @click="removeFromTodo(characterId, task.structId)"
               >
                 ✓ Added
               </button>

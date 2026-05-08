@@ -14,7 +14,7 @@ const { allTasks } = useTasks()
 
 const character = computed(() => getCharacter(characterId))
 
-const taskMap = new Map(allTasks.map((t) => [t.taskId, t]))
+const taskMap = new Map(allTasks.map((t) => [t.structId, t]))
 
 const todoTasks = computed(() => {
   return (character.value?.todoTaskIds ?? [])
@@ -25,7 +25,7 @@ const todoTasks = computed(() => {
 const plannedPoints = computed(() => {
   const completedSet = new Set(character.value?.completedTaskIds ?? [])
   return todoTasks.value
-    .filter((t) => !completedSet.has(t.taskId))
+    .filter((t) => !completedSet.has(t.structId))
     .reduce((sum, t) => sum + t.points, 0)
 })
 
@@ -67,7 +67,7 @@ function moveDown(index: number) {
         </p>
       </div>
       <button
-        v-if="todoTasks.some(t => character?.completedTaskIds.includes(t.taskId))"
+        v-if="todoTasks.some(t => character?.completedTaskIds.includes(t.structId))"
         class="rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-900/40 hover:text-red-300"
         @click="removeCompletedFromTodo(characterId)"
       >
@@ -96,9 +96,9 @@ function moveDown(index: number) {
     <div v-else class="space-y-2">
       <div
         v-for="(task, index) in todoTasks"
-        :key="task.taskId"
+        :key="task.structId"
         class="flex items-center gap-3 rounded-xl bg-gray-800 px-4 py-3 transition"
-        :class="{ 'opacity-60': character.completedTaskIds.includes(task.taskId) }"
+        :class="{ 'opacity-60': character.completedTaskIds.includes(task.structId) }"
       >
         <!-- Reorder buttons -->
         <div class="flex flex-col gap-0.5">
@@ -126,8 +126,8 @@ function moveDown(index: number) {
         <input
           type="checkbox"
           class="h-4 w-4 flex-shrink-0 rounded border-gray-600 bg-gray-700 text-blue-500 cursor-pointer"
-          :checked="character.completedTaskIds.includes(task.taskId)"
-          @change="markCompleted(characterId, task.taskId, ($event.target as HTMLInputElement).checked)"
+          :checked="character.completedTaskIds.includes(task.structId)"
+          @change="markCompleted(characterId, task.structId, ($event.target as HTMLInputElement).checked)"
         />
 
         <!-- Task info -->
@@ -144,7 +144,7 @@ function moveDown(index: number) {
           <button
             class="rounded p-1 text-gray-600 hover:text-red-400"
             title="Remove from TODO"
-            @click="removeFromTodo(characterId, task.taskId)"
+            @click="removeFromTodo(characterId, task.structId)"
           >
             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />

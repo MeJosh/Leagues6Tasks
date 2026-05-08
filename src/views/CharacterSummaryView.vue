@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCharacters } from '@/composables/useCharacters'
 import { useCharacterStats } from '@/composables/useTasks'
+import { useRegions } from '@/composables/useRegions'
 import PointsSummary from '@/components/PointsSummary.vue'
 import ImportModal from '@/components/ImportModal.vue'
 import CupProgress from '@/components/CupProgress.vue'
@@ -21,6 +22,18 @@ const { earnedPoints, plannedPoints, completedByTier, completedByArea, pactPoint
   () => character.value?.todoTaskIds ?? [],
 )
 
+const { activeRegions } = useRegions(
+  () => character.value?.completedTaskIds ?? [],
+  () => character.value?.chosenRegions ?? [],
+)
+
+const activeAreaStats = computed(() => {
+  const regionSet = new Set(activeRegions.value)
+  return Object.fromEntries(
+    Object.entries(completedByArea.value).filter(([area]) => regionSet.has(area)),
+  )
+})
+
 const showImport = ref(false)
 
 function onImport(taskIds: number[]) {
@@ -29,6 +42,7 @@ function onImport(taskIds: number[]) {
 }
 
 const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
+const tierNumbers: Record<string, number> = { Easy: 1, Medium: 2, Hard: 3, Elite: 4, Master: 5 }
 </script>
 
 <template>
@@ -105,7 +119,11 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
       <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">By Tier</h2>
       <div class="space-y-2">
         <div v-for="tier in tierOrder" :key="tier">
-          <div v-if="completedByTier[tier]" class="flex items-center gap-3">
+          <RouterLink
+            v-if="completedByTier[tier]"
+            :to="{ path: `/character/${characterId}/tasks`, query: { tier: tierNumbers[tier], status: 'all' } }"
+            class="flex items-center gap-3 rounded-lg px-1 py-0.5 hover:bg-gray-800 transition-colors"
+          >
             <span class="w-14 text-sm text-gray-400">{{ tier }}</span>
             <div class="flex-1">
               <div class="h-2 w-full overflow-hidden rounded-full bg-gray-700">
@@ -118,7 +136,7 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
             <span class="w-16 text-right text-sm text-gray-400">
               {{ completedByTier[tier].completed }}/{{ completedByTier[tier].total }}
             </span>
-          </div>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -127,10 +145,11 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
     <div class="mb-8">
       <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500">By Area</h2>
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <div
-          v-for="(stats, area) in completedByArea"
+        <RouterLink
+          v-for="(stats, area) in activeAreaStats"
           :key="area"
-          class="rounded-lg bg-gray-800 px-4 py-2"
+          :to="{ path: `/character/${characterId}/tasks`, query: { area, status: 'all' } }"
+          class="block rounded-lg bg-gray-800 px-4 py-2 hover:bg-gray-700 transition-colors"
         >
           <div class="flex justify-between text-sm">
             <span class="text-gray-300">{{ area }}</span>
@@ -142,7 +161,7 @@ const tierOrder = ['Easy', 'Medium', 'Hard', 'Elite', 'Master']
               :style="{ width: `${(stats.completed / stats.total) * 100}%` }"
             />
           </div>
-        </div>
+        </RouterLink>
       </div>
     </div>
 

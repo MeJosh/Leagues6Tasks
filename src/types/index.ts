@@ -4,7 +4,7 @@ export interface TaskSkill {
 }
 
 export interface Task {
-  taskId: number
+  structId: number
   sortId: number
   name: string
   description: string
@@ -15,12 +15,6 @@ export interface Task {
   pactTask: boolean
   skills?: TaskSkill[]
   wikiNotes?: string
-}
-
-export interface StructIdEntry {
-  structId: number
-  taskId: number
-  sortId: number
 }
 
 export interface Character {
@@ -43,7 +37,7 @@ export const TIER_COLORS: Record<TierName, string> = {
 }
 
 export const AREAS = [
-  'General',
+  'Global',
   'Asgarnia',
   'Desert',
   'Fremennik',

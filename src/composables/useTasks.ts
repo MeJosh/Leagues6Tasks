@@ -16,7 +16,7 @@ export interface TaskFilters {
 }
 
 function activeRegions(completedCount: number, chosenRegions: string[]): Set<string> {
-  const regions = new Set(['General', 'Varlamore'])
+  const regions = new Set(['Global', 'Varlamore'])
   if (completedCount >= 80) regions.add('Karamja')
   chosenRegions.forEach((r) => { if (r) regions.add(r) })
   return regions
@@ -44,9 +44,9 @@ export function useFilteredTasks(
         if (!unlockedRegions.has(task.area)) return false
       } else if (area && task.area !== area) return false
       if (tier !== null && task.tier !== tier) return false
-      if (status === 'completed' && !completedSet.has(task.taskId)) return false
-      if (status === 'incomplete' && completedSet.has(task.taskId)) return false
-      if (status === 'todo' && !todoSet.has(task.taskId)) return false
+      if (status === 'completed' && !completedSet.has(task.structId)) return false
+      if (status === 'incomplete' && completedSet.has(task.structId)) return false
+      if (status === 'todo' && !todoSet.has(task.structId)) return false
       if (q && !task.name.toLowerCase().includes(q) && !task.description.toLowerCase().includes(q))
         return false
       return true
@@ -60,7 +60,7 @@ export function useCharacterStats(completedIds: () => number[], todoIds: () => n
   const earnedPoints = computed(() => {
     const completedSet = new Set(completedIds())
     return allTasks
-      .filter((t) => completedSet.has(t.taskId))
+      .filter((t) => completedSet.has(t.structId))
       .reduce((sum, t) => sum + t.points, 0)
   })
 
@@ -68,7 +68,7 @@ export function useCharacterStats(completedIds: () => number[], todoIds: () => n
     const todoSet = new Set(todoIds())
     const completedSet = new Set(completedIds())
     return allTasks
-      .filter((t) => todoSet.has(t.taskId) && !completedSet.has(t.taskId))
+      .filter((t) => todoSet.has(t.structId) && !completedSet.has(t.structId))
       .reduce((sum, t) => sum + t.points, 0)
   })
 
@@ -80,7 +80,7 @@ export function useCharacterStats(completedIds: () => number[], todoIds: () => n
     for (const task of allTasks) {
       if (!result[task.tierName]) result[task.tierName] = { completed: 0, total: 0 }
       result[task.tierName].total++
-      if (completedSet.has(task.taskId)) result[task.tierName].completed++
+      if (completedSet.has(task.structId)) result[task.tierName].completed++
     }
     return result
   })
@@ -91,14 +91,14 @@ export function useCharacterStats(completedIds: () => number[], todoIds: () => n
     for (const task of allTasks) {
       if (!result[task.area]) result[task.area] = { completed: 0, total: 0 }
       result[task.area].total++
-      if (completedSet.has(task.taskId)) result[task.area].completed++
+      if (completedSet.has(task.structId)) result[task.area].completed++
     }
     return result
   })
 
   const pactPoints = computed(() => {
     const completedSet = new Set(completedIds())
-    const count = allTasks.filter((t) => t.pactTask && completedSet.has(t.taskId)).length
+    const count = allTasks.filter((t) => t.pactTask && completedSet.has(t.structId)).length
     return Math.min(40, count)
   })
 

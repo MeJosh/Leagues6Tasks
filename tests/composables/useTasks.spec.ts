@@ -10,7 +10,7 @@ describe('useTasks', () => {
   it('tasks have required fields', () => {
     const { allTasks } = useTasks()
     const task = allTasks[0]
-    expect(task.taskId).toBeTypeOf('number')
+    expect(task.structId).toBeTypeOf('number')
     expect(task.name).toBeTypeOf('string')
     expect(task.area).toBeTypeOf('string')
     expect(task.tier).toBeGreaterThanOrEqual(1)
@@ -57,25 +57,25 @@ describe('useFilteredTasks', () => {
 
   it('filters completed tasks', () => {
     const { allTasks } = useTasks()
-    const completedId = allTasks[0].taskId
+    const completedId = allTasks[0].structId
     const { filteredTasks } = useFilteredTasks(
       () => [completedId],
       () => [],
       () => ({ area: '', tier: null, status: 'completed', search: '' }),
     )
-    expect(filteredTasks.value.every((t) => t.taskId === completedId)).toBe(true)
+    expect(filteredTasks.value.every((t) => t.structId === completedId)).toBe(true)
     expect(filteredTasks.value).toHaveLength(1)
   })
 
   it('filters incomplete tasks', () => {
     const { allTasks } = useTasks()
-    const completedId = allTasks[0].taskId
+    const completedId = allTasks[0].structId
     const { filteredTasks } = useFilteredTasks(
       () => [completedId],
       () => [],
       () => ({ area: '', tier: null, status: 'incomplete', search: '' }),
     )
-    expect(filteredTasks.value.every((t) => t.taskId !== completedId)).toBe(true)
+    expect(filteredTasks.value.every((t) => t.structId !== completedId)).toBe(true)
   })
 
   it('filters by search term', () => {
@@ -100,7 +100,7 @@ describe('useCharacterStats', () => {
     const { allTasks } = useTasks()
     const task = allTasks.find((t) => t.points === 10)!
     const { earnedPoints } = useCharacterStats(
-      () => [task.taskId],
+      () => [task.structId],
       () => [],
     )
     expect(earnedPoints.value).toBe(10)
@@ -111,7 +111,7 @@ describe('useCharacterStats', () => {
     const task = allTasks.find((t) => t.points === 10)!
     const { plannedPoints } = useCharacterStats(
       () => [],
-      () => [task.taskId],
+      () => [task.structId],
     )
     expect(plannedPoints.value).toBe(10)
   })
@@ -120,8 +120,8 @@ describe('useCharacterStats', () => {
     const { allTasks } = useTasks()
     const task = allTasks.find((t) => t.points === 10)!
     const { plannedPoints } = useCharacterStats(
-      () => [task.taskId],
-      () => [task.taskId],
+      () => [task.structId],
+      () => [task.structId],
     )
     expect(plannedPoints.value).toBe(0)
   })
@@ -130,7 +130,7 @@ describe('useCharacterStats', () => {
     const { allTasks } = useTasks()
     const easyTask = allTasks.find((t) => t.tierName === 'Easy')!
     const { completedByTier } = useCharacterStats(
-      () => [easyTask.taskId],
+      () => [easyTask.structId],
       () => [],
     )
     expect(completedByTier.value['Easy'].completed).toBe(1)

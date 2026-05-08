@@ -5,7 +5,6 @@ function makeImport(tasks: Record<string, { completed: number; structId: number;
   return JSON.stringify({ displayName: 'TestChar', taskType: 'LEAGUE_6', tasks })
 }
 
-// structId 13805 maps to taskId 1145 (verified from LEAGUE_6.structid-map.json)
 const KNOWN_STRUCT_ID = 13805
 const UNKNOWN_STRUCT_ID = 99999999
 
@@ -16,6 +15,7 @@ describe('parseRuneLiteImport', () => {
     })
     const result = parseRuneLiteImport(json)
     expect(result.completedTaskIds).toHaveLength(1)
+    expect(result.completedTaskIds[0]).toBe(KNOWN_STRUCT_ID)
     expect(result.totalInImport).toBe(1)
     expect(result.skippedCount).toBe(0)
   })

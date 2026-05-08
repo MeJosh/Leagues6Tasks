@@ -16,7 +16,7 @@ export type ChoosableRegion = (typeof CHOOSABLE_REGIONS)[number]
 export const CHOICE_THRESHOLDS = [200, 300, 450] as const
 
 export const REGION_COLORS: Record<string, string> = {
-  General: 'bg-gray-600 text-gray-200',
+  Global: 'bg-gray-600 text-gray-200',
   Varlamore: 'bg-yellow-700 text-yellow-100',
   Karamja: 'bg-green-700 text-green-100',
   Asgarnia: 'bg-blue-700 text-blue-100',
@@ -50,7 +50,7 @@ export function useRegions(completedIds: () => number[], chosenRegions: () => st
   })
 
   const activeRegions = computed(() => {
-    const regions = ['General', 'Varlamore']
+    const regions = ['Global', 'Varlamore']
     if (karamjaUnlocked.value) regions.push('Karamja')
     chosenRegions().forEach((r) => {
       if (r) regions.push(r)

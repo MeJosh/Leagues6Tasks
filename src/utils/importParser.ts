@@ -1,9 +1,7 @@
-import type { RuneLiteImport, StructIdEntry } from '@/types'
-import structIdMap from '@/assets/tasks/LEAGUE_6.structid-map.json'
+import type { RuneLiteImport } from '@/types'
+import tasksData from '@/assets/tasks/LEAGUE_6.full.json'
 
-const structToTaskId: Map<number, number> = new Map(
-  (structIdMap as StructIdEntry[]).map((e) => [e.structId, e.taskId]),
-)
+const knownStructIds = new Set(tasksData.map((t) => t.structId))
 
 export interface ImportResult {
   completedTaskIds: number[]
@@ -28,12 +26,11 @@ export function parseRuneLiteImport(json: string): ImportResult {
 
   for (const [, entry] of Object.entries(parsed.tasks)) {
     if (!entry.completed || entry.completed <= 0) continue
-    const taskId = structToTaskId.get(entry.structId)
-    if (taskId === undefined) {
+    if (!knownStructIds.has(entry.structId)) {
       skippedCount++
       continue
     }
-    completedTaskIds.push(taskId)
+    completedTaskIds.push(entry.structId)
   }
 
   return {

@@ -12,7 +12,7 @@ const { allTasks } = useTasks()
 
 const character = computed(() => getCharacter(props.characterId))
 
-const taskMap = new Map(allTasks.map((t) => [t.taskId, t]))
+const taskMap = new Map(allTasks.map((t) => [t.structId, t]))
 
 const completedSet = computed(() => new Set(character.value?.completedTaskIds ?? []))
 
@@ -24,7 +24,7 @@ const nextTasks = computed(() =>
 )
 
 const hasCompleted = computed(() =>
-  nextTasks.value.some((t) => completedSet.value.has(t.taskId)),
+  nextTasks.value.some((t) => completedSet.value.has(t.structId)),
 )
 </script>
 
@@ -53,18 +53,18 @@ const hasCompleted = computed(() =>
     <div v-else class="divide-y divide-gray-700/50">
       <div
         v-for="task in nextTasks"
-        :key="task.taskId"
+        :key="task.structId"
         class="flex items-center gap-3 py-2.5 transition-colors"
-        :class="completedSet.has(task.taskId) ? 'opacity-50' : ''"
+        :class="completedSet.has(task.structId) ? 'opacity-50' : ''"
       >
         <input
           type="checkbox"
           class="h-4 w-4 flex-shrink-0 rounded border-gray-600 bg-gray-700 text-blue-500 cursor-pointer"
-          :checked="completedSet.has(task.taskId)"
-          @change="markCompleted(characterId, task.taskId, ($event.target as HTMLInputElement).checked)"
+          :checked="completedSet.has(task.structId)"
+          @change="markCompleted(characterId, task.structId, ($event.target as HTMLInputElement).checked)"
         />
         <div class="min-w-0 flex-1">
-          <p class="truncate text-sm" :class="completedSet.has(task.taskId) ? 'line-through text-gray-500' : 'text-gray-200'">
+          <p class="truncate text-sm" :class="completedSet.has(task.structId) ? 'line-through text-gray-500' : 'text-gray-200'">
             {{ task.name }}
           </p>
           <p class="truncate text-xs text-gray-500">{{ task.area }}</p>
