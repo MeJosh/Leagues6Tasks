@@ -11,7 +11,7 @@ const CUPS: CupTier[] = [
   { name: 'Adamant', threshold: 32_000 },
   { name: 'Rune',    threshold: 47_500 },
   { name: 'Dragon',  threshold: 65_000 },
-  { name: 'Maximum', threshold: 150_640 },
+  { name: 'Maximum', threshold: 146_040 },
 ]
 
 function getCurrentTier(points: number): CupTier | null {
@@ -49,7 +49,7 @@ describe('CupProgress tier logic', () => {
   })
 
   it('returns Maximum at 150,640', () => {
-    expect(getCurrentTier(150_640)?.name).toBe('Maximum')
+    expect(getCurrentTier(146_040)?.name).toBe('Maximum')
   })
 
   it('returns next tier correctly', () => {
@@ -59,7 +59,7 @@ describe('CupProgress tier logic', () => {
   })
 
   it('returns null next tier at maximum points', () => {
-    expect(getNextTier(150_640)).toBeNull()
+    expect(getNextTier(146_040)).toBeNull()
   })
 
   it('progress is 0% at tier threshold', () => {
@@ -73,7 +73,7 @@ describe('CupProgress tier logic', () => {
   })
 
   it('progress is 100% at maximum', () => {
-    expect(progressPercent(150_640)).toBe(100)
+    expect(progressPercent(146_040)).toBe(100)
   })
 
   it('progress never exceeds 100', () => {
@@ -91,6 +91,6 @@ describe('CupProgress tier logic', () => {
   })
 
   it('Maximum threshold matches total task points', () => {
-    expect(CUPS[CUPS.length - 1].threshold).toBe(150_640)
+    expect(CUPS[CUPS.length - 1].threshold).toBe(146_040)
   })
 })

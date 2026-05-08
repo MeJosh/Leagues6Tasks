@@ -18,10 +18,10 @@ describe('useTasks', () => {
     expect(task.points).toBeGreaterThan(0)
   })
 
-  it('total points sum to 150640', () => {
+  it('total points sum to 146040', () => {
     const { allTasks } = useTasks()
     const total = allTasks.reduce((s, t) => s + t.points, 0)
-    expect(total).toBe(150640)
+    expect(total).toBe(146040)
   })
 })
 

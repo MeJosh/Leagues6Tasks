@@ -19,7 +19,7 @@ const CUPS: CupTier[] = [
   { name: 'Adamant',  threshold: 32_000,  color: 'text-green-400',   barColor: 'bg-green-400',   icon: '🏆' },
   { name: 'Rune',     threshold: 47_500,  color: 'text-cyan-400',    barColor: 'bg-cyan-400',    icon: '🏆' },
   { name: 'Dragon',   threshold: 65_000,  color: 'text-red-400',     barColor: 'bg-red-400',     icon: '🏆' },
-  { name: 'Maximum',  threshold: 150_640, color: 'text-yellow-400',  barColor: 'bg-yellow-400',  icon: '👑' },
+  { name: 'Maximum',  threshold: 146_040, color: 'text-yellow-400',  barColor: 'bg-yellow-400',  icon: '👑' },
 ]
 
 const currentTierIndex = computed(() => {
@@ -78,7 +78,7 @@ const pointsToNext = computed(() =>
       </div>
       <div class="mt-1 flex justify-between text-xs text-gray-500">
         <span>{{ (currentTier?.threshold ?? 0).toLocaleString() }}</span>
-        <span>{{ (nextTier?.threshold ?? 150_640).toLocaleString() }}</span>
+        <span>{{ (nextTier?.threshold ?? 146_040).toLocaleString() }}</span>
       </div>
     </div>
 
