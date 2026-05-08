@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'fs'
-import { resolve } from 'path'
+import csvText from '../fixtures/area-stats.csv?raw'
 import allTasks from '@/assets/tasks/LEAGUE_6.full.json'
 
 interface AreaRow {
@@ -17,13 +16,12 @@ interface AreaRow {
 const TIER_POINTS: Record<number, number> = { 1: 10, 2: 30, 3: 80, 4: 200, 5: 400 }
 
 function parseAreaCsv(): AreaRow[] {
-  const csv = readFileSync(resolve(__dirname, '../fixtures/area-stats.csv'), 'utf-8')
-  const [header, ...rows] = csv.trim().split('\n')
+  const [header, ...rows] = csvText.trim().split('\n')
   const keys = header.split(',')
   return rows.map((row) => {
     const vals = row.split(',')
     const obj: Record<string, string | number> = {}
-    keys.forEach((k, i) => {
+    keys.forEach((k: string, i: number) => {
       obj[k] = isNaN(Number(vals[i])) ? vals[i] : Number(vals[i])
     })
     return obj as unknown as AreaRow
